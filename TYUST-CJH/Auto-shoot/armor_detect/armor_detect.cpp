@@ -13,43 +13,11 @@
 ///
 /// //
 ///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
-///
 
+/****************************************
+* @funcName AdvancedPredictForArmorDetect
+* @brief   给数值大小排序方便后面剔除不正常数据
+*****************************************/
 double ArmorProcess::media(double a,double b,double c)
 {
 
@@ -84,16 +52,16 @@ bool ArmorProcess::AdvancedPredictForArmorDetect(RotatedRect &present_armor,Rota
     //如果队列元素不足
     if(armor_queue.size() <= 1)
     {
-        armor_queue.push(present_armor);
-        armor_queue_time.push(getTickCount());
-        return false ;
+        armor_queue.push(present_armor);//获取当前装甲板状态
+        armor_queue_time.push(getTickCount());//获取时间
+        return false ;//跳出函数
     }
-    else if(armor_queue.size() == 2)
+    else if(armor_queue.size() == 2)//如果已经有至少一组数据情况下
     {
-        armor_queue.pop();
-        armor_queue.push(present_armor);
+        armor_queue.pop();//把已有数据网上填顶
+        armor_queue.push(present_armor);//把新的数据放进来
 
-        armor_queue_time.pop();                                         //弹出时间
+        armor_queue_time.pop();    //把时间网上弹                                     //弹出时间
         armor_queue_time.push(getTickCount());                          //压入时间
 
         bool is_height_min = (armor_queue.back().size.height < armor_queue.back().size.width);
@@ -174,7 +142,6 @@ bool ArmorProcess::AdvancedPredictForArmorDetect(RotatedRect &present_armor,Rota
         double velocity_width = (MAX(armor_queue.back().size.height, armor_queue.back().size.width) -
         MAX(armor_queue.front().size.height, armor_queue.front().size.width)) / delta_time;
 
-        cout<<"CCC :"<<velocity_x <<endl;
         kalmanfilter.EstimatedTimeofArrival = delta_time/2  + 0.003;//预测时间为处理时间加响应时间//+ 0.05
         cout<<"ETA :"<<kalmanfilter.EstimatedTimeofArrival<<endl;
         kalmanfilter.KF.transitionMatrix = (Mat_<float>(8, 8) << 1,0,0,0,kalmanfilter.EstimatedTimeofArrival,0,0,0,//x
@@ -749,8 +716,7 @@ RotatedRect ArmorProcess::drawRotatedRect(cv::Mat &img, const cv::RotatedRect &r
 void ArmorProcess::ArmorDetecter(cv::Mat &src_image,Rect roi_rect,ArmorPosture &fight_info,vector<armor>&final_armor_list)
 {
 
-    ArmorPlate present_armor;                 //现在的装甲板类
-    ArmorPlate predict_armor;                //卡尔曼预测得到的所需击打的装甲板
+
 
     Point2f offset_roi_point(roi_rect.x,roi_rect.y);
     vector<LED_Stick>LED_Stick_v;
@@ -1024,13 +990,12 @@ void ArmorProcess::ArmorDetecter(cv::Mat &src_image,Rect roi_rect,ArmorPosture &
 
 //             if(abs(predict_armor.boundingRect.center.x - present_armor.boundingRect.center.x) >30 && abs(predict_armor.boundingRect.center.x - present_armor.boundingRect.center.x) <500)
 //           {
-//                 cout<<"???????????????????????????????//"<<predict_armor.boundingRect.center << present_armor.boundingRect.center<<endl;
+//                 cout<<//"<<predict_armor.boundingRect.center << present_armor.boundingRect.center<<endl;
 //                 Point2f predict_vector = predict_armor.boundingRect.center - present_armor.boundingRect.center;
 //                         for(int i = 0; i < 4 ;i++)
 //                             predict_armor.apex[i] = present_armor.apex[i] + predict_vector;
 
-//             Armor.Rect = predict_armor.boundingRect;
-
+//             Armor.Rect = predict_armor.boundingRect
 //             }
 
              final_armor_list.push_back(Armor);
