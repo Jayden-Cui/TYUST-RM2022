@@ -174,8 +174,8 @@ void VisualProc::produce()
 * @brief    接收数据线程
 * @para     无
 * @return   无
-* @date     2021.4.27
-* @author   wjl
+* @date     2022.5.2
+* @author   cjh
 *****************************************/
 void VisualProc::consumer()
 {
